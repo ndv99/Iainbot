@@ -37,4 +37,9 @@ async def pun(ctx):
     response = random.choice(IAIN_PUNS)
     await ctx.send(response)
 
+@bot.command(name="thanks")
+async def pun(ctx):
+    response = "No worries!\nhttps://media.discordapp.net/attachments/497770127975120907/783443362429927465/FaceApp_1603736244196.jpg"
+    await ctx.send(response)
+
 bot.run(TOKEN)
