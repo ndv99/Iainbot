@@ -4,14 +4,15 @@ import os
 import configparser
 from discord.ext import commands
 from discord import utils
+from discord import File
 import random
 
 # https://docs.python.org/3/library/configparser.html
 config = configparser.ConfigParser()
 config.read("iain.cfg")
 
+# gets the bot token
 TOKEN = config["INFO"]["token"]
-GUILD = config["INFO"]["server"]
 IAIN_PUNS = [
         "Don't interrupt someone working intently on a puzzle. Chances are, you'll hear some crosswords!",
         "I'm a big fan of whiteboards. I find them quite re-markable!",
@@ -19,27 +20,38 @@ IAIN_PUNS = [
         "The machine at the coin factory just suddenly stopped working, with no explanation. It doesn't make any cents!",
         "Yesterday, a clown held the door open for me. It was such a nice jester!",
         "I'm only friends with 25 letters of the alphabet. I don't know Y."
-    ]
+    ] # yes, this is indeed a list of puns.
 
-bot = commands.Bot(command_prefix="!")
+bot = commands.Bot(command_prefix="!") #setting the command prefix to !
 
+# bot initialisation readouts
 @bot.event
 async def on_ready():
     # guild = utils.find(lambda g: g.name == GUILD, bot.guilds)
     print(
         # f'{bot.user.name} is connected to the following guild:\n'
         # f'{guild.name}(id: {guild.id})'
-        f'{bot.user.name} is connected to discord!'
+        f'{bot.user.name} is live.\n'
+        f'{bot.user.name} is connected to:'
         )
+    for server in bot.guilds:
+        print(
+            f'-{server.name}'
+            )
+    print("")
 
+# prints a random pun from the pun list
 @bot.command(name="pun")
 async def pun(ctx):
     response = random.choice(IAIN_PUNS)
     await ctx.send(response)
 
+# prints "No worries!" with an image of ronald murray smiling. How lovely
 @bot.command(name="thanks")
 async def pun(ctx):
-    response = "No worries!\nhttps://media.discordapp.net/attachments/497770127975120907/783443362429927465/FaceApp_1603736244196.jpg"
+    response = "No worries!"
+    smiley_iain = File("images/smiley_iain.png")
     await ctx.send(response)
+    await ctx.send(file=smiley_iain)
 
 bot.run(TOKEN)
