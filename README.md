@@ -7,8 +7,8 @@
 4. Use `pip` to download discord.py: `pip install discord.py`
 5. Create a file called `iain.cfg` and structure it like so:
 
-    [INFO]
-    token = your-bot-token
-    server = your-server-name
+        [INFO]
+        token = your-bot-token
+        server = your-server-name
     
 6. Run the bot!
