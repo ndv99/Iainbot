@@ -4,6 +4,7 @@ import os
 import configparser
 from discord.ext import commands
 from discord import utils
+from discord import File
 import random
 
 # https://docs.python.org/3/library/configparser.html
@@ -11,7 +12,6 @@ config = configparser.ConfigParser()
 config.read("iain.cfg")
 
 TOKEN = config["INFO"]["token"]
-GUILD = config["INFO"]["server"]
 IAIN_PUNS = [
         "Don't interrupt someone working intently on a puzzle. Chances are, you'll hear some crosswords!",
         "I'm a big fan of whiteboards. I find them quite re-markable!",
@@ -39,7 +39,9 @@ async def pun(ctx):
 
 @bot.command(name="thanks")
 async def pun(ctx):
-    response = "No worries!\nhttps://media.discordapp.net/attachments/497770127975120907/783443362429927465/FaceApp_1603736244196.jpg"
+    response = "No worries!"
+    smiley_iain = File("images/smiley_iain.png")
     await ctx.send(response)
+    await ctx.send(file=smiley_iain)
 
 bot.run(TOKEN)
