@@ -9,6 +9,5 @@
 
         [INFO]
         token = your-bot-token
-        server = your-server-name
-    
+        
 6. Run the bot!
