@@ -7,7 +7,7 @@ import random
 
 # https://docs.python.org/3/library/configparser.html
 config = configparser.ConfigParser()
-config.read(".iain.cfg")
+config.read("iain.cfg")
 TOKEN = config["INFO"]["token"]
 GUILD = config["INFO"]["server"]
 
