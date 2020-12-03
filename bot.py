@@ -72,25 +72,25 @@ async def on_command_error(ctx, error):
         await ctx.send("Sorry, I don't understand what you mean!")
 
 # prints a random pun from the pun list
-@bot.command(name="pun")
+@bot.command(name="pun", brief="Sends a random pun", help="Sends a random pun from a predefined list. Ask Nick about adding more!")
 async def pun(ctx):
     response = random.choice(IAIN_PUNS)
     await ctx.send(response)
 
 # prints "No worries!" with an image of ronald murray smiling. How lovely
-@bot.command(name="thanks")
+@bot.command(name="thanks", brief="You're welcome (and a free iain picture)", help="Responds to a user saying `You're welcome` and a picture of Iain smiling. How cute")
 async def pun(ctx):
     response = "No worries!"
     smiley_iain = File("images/smiley_iain.png")
     await ctx.send(response)
     await ctx.send(file=smiley_iain)
 
-@bot.command(name="anecdote")
+@bot.command(name="anecdote", brief="[beta]Responds with the beginning of an annecdote", help="Responds with an annecdote akin to something Iain might say. Needs more work, feel free to contribute.")
 async def pun(ctx):
     response = "I remember once back in 1987 when I was learning to work with computers..."
     await ctx.send(response)
 
-@bot.command(name="join")
+@bot.command(name="join", brief="Join a VC that the user is in", help="Joins whichever voice channel the message author is in. Returns an error message if you're not in one.")
 async def join(ctx):
     try:
         channel = ctx.author.voice.channel
@@ -98,7 +98,7 @@ async def join(ctx):
     except AttributeError:
         await ctx.send("You need to join a voice channel first before I can join you!")
 
-@bot.command(name="leave")
+@bot.command(name="leave", brief="Leaves whatever VC he's in.", help="Leaves whichever voice channel he's currently in. Responds with an error message if he's not in a voice channel.")
 async def leave(ctx):
     try:
         await ctx.voice_client.disconnect()
