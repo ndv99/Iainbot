@@ -117,7 +117,7 @@ async def leave(ctx):
         await ctx.send("I can't leave the voice channel because I'm not in one!")
 
 # toggles auto-role for a server
-@bot.command(name="autorole")
+@bot.command(name="autorole", brief="Toggle automatic role assignment", help="Turns automatic role assignment on or off (using arg 'true' or 'false' respectively). It'll give the status of autorole if you don't provide args", usage="<true/false>")
 async def autorole(ctx, *arg):
     mod = False
     for role in ctx.message.author.roles:
@@ -145,7 +145,7 @@ async def autorole(ctx, *arg):
         await ctx.send(RESTRICTED_COMMAND_MSG)
 
 # sets the default role
-@bot.command(name="defaultRole")
+@bot.command(name="defaultRole", brief="Sets the default role for new users", help="Sets the default role that autorole uses for new users. You need to turn autorole on for this to work!" usage="<rolename>")
 async def set_default_role(ctx, *arg):
     mod = False
     for role in ctx.message.author.roles:
