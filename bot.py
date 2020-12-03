@@ -26,13 +26,17 @@ IAIN_PUNS = [
         "Yesterday, a clown held the door open for me. It was such a nice jester!",
         "I'm only friends with 25 letters of the alphabet. I don't know Y."
     ] # yes, this is indeed a list of puns.
-DEFAULT_ROLE = "SetYourRolePlease" # Role to be autoroled when user joins
+RESTRICTED_COMMAND_MSG = "Sorry, that command is for server moderators only!"
+
+print("constants initialised.")
 
 # bot intents
 intents = Intents.default()
 intents.members = True
+print("bot intents set.")
 
 bot = commands.Bot(command_prefix="!", intents=intents) #setting the command prefix to !
+print("bot created.")
 
 # bot initialisation readouts
 @bot.event
@@ -62,7 +66,7 @@ async def on_guild_join(guild):
 @bot.event
 async def on_member_join(member):
     if config[member.guild.name]["autorole"] == "true":
-        rank = utils.get(member.guild.roles, name=DEFAULT_ROLE) #Bot get guild(server) roles
+        rank = utils.get(member.guild.roles, name=config[member.guild.name]["default_role"]) #Bot get guild(server) roles
         await member.add_roles(rank)
         print(f"{member} was given the {rank} role.")
 
@@ -70,6 +74,8 @@ async def on_member_join(member):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send("Sorry, I don't understand what you mean!")
+
+print("events defined.")
 
 # prints a random pun from the pun list
 @bot.command(name="pun", brief="Sends a random pun", help="Sends a random pun from a predefined list. Ask Nick about adding more!")
@@ -85,11 +91,13 @@ async def pun(ctx):
     await ctx.send(response)
     await ctx.send(file=smiley_iain)
 
+# gives an anecdote
 @bot.command(name="anecdote", brief="[beta]Responds with the beginning of an annecdote", help="Responds with an annecdote akin to something Iain might say. Needs more work, feel free to contribute.")
 async def pun(ctx):
     response = "I remember once back in 1987 when I was learning to work with computers..."
     await ctx.send(response)
 
+# joins VC of user
 @bot.command(name="join", brief="Join a VC that the user is in", help="Joins whichever voice channel the message author is in. Returns an error message if you're not in one.")
 async def join(ctx):
     try:
@@ -98,6 +106,7 @@ async def join(ctx):
     except AttributeError:
         await ctx.send("You need to join a voice channel first before I can join you!")
 
+# leaves VC
 @bot.command(name="leave", brief="Leaves whatever VC he's in.", help="Leaves whichever voice channel he's currently in. Responds with an error message if he's not in a voice channel.")
 async def leave(ctx):
     try:
@@ -105,16 +114,24 @@ async def leave(ctx):
     except AttributeError:
         await ctx.send("I can't leave the voice channel because I'm not in one!")
 
+# toggles auto-role for a server
 # @bot.command(name="autorole")
 # async def autorole(ctx, arg):
-#     # mod = any(x in ctx.message.author.roles for x in config[ctx.guild.name]["adminroles"].split(","))
-#     if arg == "true":
-#         # config[ctx.guild.name]["autorole"] = {"true"}
-#         # config.write(open("iain.cfg", "w"))
-#         await ctx.send("Autorole set to true")
+#     print("Command received")
+#     mod = any(x in ctx.message.author.roles for x in config[ctx.guild.name]["adminroles"].split(","))
+#     if mod:
+#         if arg == "true":
+#             # config[ctx.guild.name]["autorole"] = {"true"}
+#             # config.write(open("iain.cfg", "w"))
+#             await ctx.send("Autorole set to true")
+#     else:
+#         await ctx.send(RESTRICTED_COMMAND_MSG)
+
+print ("functions loaded.")
 
 if TOKEN == "" or TOKEN == " ":
     print("You haven't set your bot's token.")
     print("Please go into iain.cfg and paste in your bot's token, which can be found here: https://discord.com/developers/applications/")
 else:
+    print("running bot.")
     bot.run(TOKEN)
