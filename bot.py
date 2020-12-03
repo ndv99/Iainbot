@@ -5,10 +5,15 @@ import configparser
 from discord.ext import commands
 from discord import utils
 from discord import File
+from discord import Intents
 import random
 
 # https://docs.python.org/3/library/configparser.html
 config = configparser.ConfigParser()
+if not os.path.exists("iain.cfg"):
+    config["INFO"] = {"token": ""}
+    config.write(open("iain.cfg, w"))
+
 config.read("iain.cfg")
 
 # gets the bot token
@@ -21,29 +26,50 @@ IAIN_PUNS = [
         "Yesterday, a clown held the door open for me. It was such a nice jester!",
         "I'm only friends with 25 letters of the alphabet. I don't know Y."
     ] # yes, this is indeed a list of puns.
+DEFAULT_ROLE = "SetYourRolePlease" # Role to be autoroled when user joins
 
-bot = commands.Bot(command_prefix="!") #setting the command prefix to !
+# bot intents
+intents = Intents.default()
+intents.members = True
+
+bot = commands.Bot(command_prefix="!", intents=intents) #setting the command prefix to !
 
 # bot initialisation readouts
 @bot.event
 async def on_ready():
-    # guild = utils.find(lambda g: g.name == GUILD, bot.guilds)
     print(
-        # f'{bot.user.name} is connected to the following guild:\n'
-        # f'{guild.name}(id: {guild.id})'
         f'{bot.user.name} is live.\n'
         f'{bot.user.name} is connected to:'
         )
-    for server in bot.guilds:
+    for guild in bot.guilds:
         print(
-            f'-{server.name}'
+            f'-{guild.name}'
             )
     print("")
 
+# creates server info in cfg file when bot joins server
+@bot.event
+async def on_guild_join(guild):
+    config[f"{guild.name}"] = {"name": f"'{guild.name}''", "autorole": "false", "default_role": "", "adminroles": "", "self_assignable_roles": ""}
+    config.write(open("iain.cfg", "w"))
+    print(f"{bot.user.name} has joined {guild.name}")
+
+    general = utils.find(lambda x: x.name == 'general',  guild.text_channels)
+    if general and general.permissions_for(guild.me).send_messages:
+        await general.send('Hello {}!'.format(guild.name))
+
+# auto-assigns member role if enabled
 @bot.event
 async def on_member_join(member):
-    role = discord.utils.get(member.server.roles, id="SetYourRolePlease")
-    await bot.add_roles(member, role)
+    if config[member.guild.name]["autorole"] == "true":
+        rank = utils.get(member.guild.roles, name=DEFAULT_ROLE) #Bot get guild(server) roles
+        await member.add_roles(rank)
+        print(f"{member} was given the {rank} role.")
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send("Sorry, I don't understand what you mean!")
 
 # prints a random pun from the pun list
 @bot.command(name="pun")
@@ -66,11 +92,29 @@ async def pun(ctx):
 
 @bot.command(name="join")
 async def join(ctx):
-    channel = ctx.author.voice.channel
-    await channel.connect()
+    try:
+        channel = ctx.author.voice.channel
+        await channel.connect()
+    except AttributeError:
+        await ctx.send("You need to join a voice channel first before I can join you!")
 
 @bot.command(name="leave")
 async def leave(ctx):
-    await ctx.voice_client.disconnect()
+    try:
+        await ctx.voice_client.disconnect()
+    except AttributeError:
+        await ctx.send("I can't leave the voice channel because I'm not in one!")
 
-bot.run(TOKEN)
+# @bot.command(name="autorole")
+# async def autorole(ctx, arg):
+#     # mod = any(x in ctx.message.author.roles for x in config[ctx.guild.name]["adminroles"].split(","))
+#     if arg == "true":
+#         # config[ctx.guild.name]["autorole"] = {"true"}
+#         # config.write(open("iain.cfg", "w"))
+#         await ctx.send("Autorole set to true")
+
+if TOKEN == "" or TOKEN == " ":
+    print("You haven't set your bot's token.")
+    print("Please go into iain.cfg and paste in your bot's token, which can be found here: https://discord.com/developers/applications/")
+else:
+    bot.run(TOKEN)
