@@ -40,6 +40,11 @@ async def on_ready():
             )
     print("")
 
+@bot.event
+async def on_member_join(member):
+    role = discord.utils.get(member.server.roles, id="SetYourRolePlease")
+    await bot.add_roles(member, role)
+
 # prints a random pun from the pun list
 @bot.command(name="pun")
 async def pun(ctx):
@@ -53,5 +58,19 @@ async def pun(ctx):
     smiley_iain = File("images/smiley_iain.png")
     await ctx.send(response)
     await ctx.send(file=smiley_iain)
+
+@bot.command(name="anecdote")
+async def pun(ctx):
+    response = "I remember once back in 1987 when I was learning to work with computers..."
+    await ctx.send(response)
+
+@bot.command(name="join")
+async def join(ctx):
+    channel = ctx.author.voice.channel
+    await channel.connect()
+
+@bot.command(name="leave")
+async def leave(ctx):
+    await ctx.voice_client.disconnect()
 
 bot.run(TOKEN)
