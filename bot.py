@@ -70,10 +70,12 @@ async def on_member_join(member):
         await member.add_roles(rank)
         print(f"{member} was given the {rank} role.")
 
+# error handler
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send("Sorry, I don't understand what you mean!")
+    raise error
 
 print("events defined.")
 
@@ -93,7 +95,7 @@ async def pun(ctx):
 
 # gives an anecdote
 @bot.command(name="anecdote", brief="[beta]Responds with the beginning of an annecdote", help="Responds with an annecdote akin to something Iain might say. Needs more work, feel free to contribute.")
-async def pun(ctx):
+async def anecdote(ctx):
     response = "I remember once back in 1987 when I was learning to work with computers..."
     await ctx.send(response)
 
@@ -115,17 +117,63 @@ async def leave(ctx):
         await ctx.send("I can't leave the voice channel because I'm not in one!")
 
 # toggles auto-role for a server
-# @bot.command(name="autorole")
-# async def autorole(ctx, arg):
-#     print("Command received")
-#     mod = any(x in ctx.message.author.roles for x in config[ctx.guild.name]["adminroles"].split(","))
-#     if mod:
-#         if arg == "true":
-#             # config[ctx.guild.name]["autorole"] = {"true"}
-#             # config.write(open("iain.cfg", "w"))
-#             await ctx.send("Autorole set to true")
-#     else:
-#         await ctx.send(RESTRICTED_COMMAND_MSG)
+@bot.command(name="autorole")
+async def autorole(ctx, *arg):
+    mod = False
+    for role in ctx.message.author.roles:
+        if role.name in config[ctx.guild.name]["admin_roles"].split(","):
+            mod = True
+    if mod:
+        if config[ctx.guild.name]["default_role"] == "" or config[ctx.guild.name]["default_role"] == " ":
+            await ctx.send("Please set a default role using `defaultRole <rolename>` before activating autorole.")
+        else:
+            if arg:
+                if arg[0] == "true":
+                    config[ctx.guild.name]["autorole"] = 'true'
+                    config.write(open("iain.cfg", "w"))
+                    await ctx.send("Autorole is now true")
+                elif arg[0] == "false":
+                    config[ctx.guild.name]["autorole"] = 'false'
+                    config.write(open("iain.cfg", "w"))
+                    await ctx.send("Autorole is now false")
+                else:
+                    await ctx.send("Invalid argument. Please try again.")
+            else:
+                autorole_status = config[ctx.guild.name]["autorole"]
+                await ctx.send(f"Autorole status: {autorole_status}")
+    else:
+        await ctx.send(RESTRICTED_COMMAND_MSG)
+
+# sets the default role
+@bot.command(name="defaultRole")
+async def set_default_role(ctx, *arg):
+    mod = False
+    for role in ctx.message.author.roles:
+        if role.name in config[ctx.guild.name]["admin_roles"].split(","):
+            mod = True
+    if mod:
+        if arg:
+            roles = ctx.guild.roles
+            valid_role = False
+            for role in roles:
+                if arg[0] == role.name:
+                    valid_role = True
+                    break
+            if valid_role:
+                config[ctx.guild.name]["default_role"] = arg[0]
+                config.write(open("iain.cfg", "w"))
+                await ctx.send(f"Default role for new members is now `{arg[0]}`")
+
+                if config[ctx.guild.name]["autorole"] == 'false':
+                    await ctx.send("Remember to activate autorole to use this feature!")
+
+            else:
+                await ctx.send(f"`{arg[0]}` is not in the list of roles for this server.")
+        else:
+            current_default_role = config[ctx.guild.name]["default_role"]
+            await ctx.send(f"Current default role: {current_default_role}")
+    else:
+        await ctx.send(RESTRICTED_COMMAND_MSG)
 
 print ("functions loaded.")
 
