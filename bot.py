@@ -38,6 +38,15 @@ print("bot intents set.")
 bot = commands.Bot(command_prefix="!", intents=intents) #setting the command prefix to !
 print("bot created.")
 
+# mod checker
+def check_if_mod(roles, guildname):
+    mod = False
+    for role in roles:
+        if role.name in config[guildname]["admin_roles"].split(","):
+            mod = True
+    return mod
+
+
 # bot initialisation readouts
 @bot.event
 async def on_ready():
@@ -119,10 +128,7 @@ async def leave(ctx):
 # toggles auto-role for a server
 @bot.command(name="autorole", brief="[Admin]Toggle automatic role assignment", help="Turns automatic role assignment on or off (using arg 'true' or 'false' respectively). It'll give the status of autorole if you don't provide args", usage="<true/false>")
 async def autorole(ctx, *arg):
-    mod = False
-    for role in ctx.message.author.roles:
-        if role.name in config[ctx.guild.name]["admin_roles"].split(","):
-            mod = True
+    mod = check_if_mod(ctx.message.author.roles, ctx.guild.name)
     if mod:
         if config[ctx.guild.name]["default_role"] == "" or config[ctx.guild.name]["default_role"] == " ":
             await ctx.send("Please set a default role using `defaultRole <rolename>` before activating autorole.")
@@ -147,10 +153,7 @@ async def autorole(ctx, *arg):
 # sets the default role
 @bot.command(name="defaultRole", brief="[Admin]Sets the default role for new users", help="Sets the default role that autorole uses for new users. You need to turn autorole on for this to work!", usage="<rolename>")
 async def set_default_role(ctx, *arg):
-    mod = False
-    for role in ctx.message.author.roles:
-        if role.name in config[ctx.guild.name]["admin_roles"].split(","):
-            mod = True
+    mod = check_if_mod(ctx.message.author.roles, ctx.guild.name)
     if mod:
         if arg:
             roles = ctx.guild.roles
@@ -174,6 +177,93 @@ async def set_default_role(ctx, *arg):
             await ctx.send(f"Current default role: {current_default_role}")
     else:
         await ctx.send(RESTRICTED_COMMAND_MSG)
+
+@bot.command(name="selfAssignableRoles", brief="[Admin]Add/remove/view self-assignable roles", help="Add, remove, or view roles which are self-assignable. Leave empty to view self-assignable roles", usage="<add/remove> <rolename>")
+async def self_assignable_roles(ctx, *args):
+    mod = check_if_mod(ctx.message.author.roles, ctx.guild.name)
+    if mod:
+        if args:
+            roles = ctx.guild.roles
+            valid_role = False
+            for role in roles:
+                try:
+                    if args[1] == role.name:
+                        valid_role = True
+                        break
+                except IndexError:
+                    await ctx.send("You need to specify which role you're trying to modify!")
+                    break
+            if valid_role:
+                if args[0] == "add":
+                    current_roles = config[ctx.guild.name]["self_assignable_roles"].split(",")
+                    if args[1] not in current_roles:
+                        current_roles.append(args[1])
+                        if current_roles[0] == "":
+                            current_roles.pop(0)
+                        config[ctx.guild.name]["self_assignable_roles"] = ",".join(current_roles)
+                        config.write(open("iain.cfg", "w"))
+                        await ctx.send(f"`{args[1]}` is now self-assignable.")
+                    else:
+                        await ctx.send(f"`{args[1]}` is already self-assignable!")
+
+
+                elif args[0] == "remove":
+                    current_roles = config[ctx.guild.name]["self_assignable_roles"].split(",")
+                    if current_roles[0] == "":
+                        current_roles.pop(0)
+
+                    if args[1] in current_roles:
+                        current_roles.remove(args[1])
+                        config[ctx.guild.name]["self_assignable_roles"] = ",".join(current_roles)
+                        config.write(open("iain.cfg", "w"))
+                        await ctx.send(f"`{args[1]}` is no longer self-assignable.")
+                    else:
+                        await ctx.send("That role is not self-assignable, no need to remove it.")
+                    
+                else:
+                    await ctx.send("Sorry, that option does not exist!")
+            else:
+                await ctx.send(f"`{args[1]}` is not in the list of roles for this server.")
+        else:
+            current_roles = config[ctx.guild.name]["self_assignable_roles"]
+            await ctx.send(f"Current self-assignable roles: {current_roles}")
+    else:
+        await ctx.send(RESTRICTED_COMMAND_MSG)
+
+@bot.command(name="iam", brief="Assign yourself a role. Leave empty to see self-assignable roles.", help="Assign yourself one of the self-assignable roles. If you don't provide a role name, the list of self-assignable roles wll be shown.", usage="<rolename>")
+async def self_assign_role(ctx, *arg):
+    if arg:
+        roles = ctx.guild.roles
+        role_exists = False
+        valid_role = False
+        for role in roles:
+            try:
+                if arg[0] == role.name:
+                    role_exists = True
+                    break
+            except IndexError:
+                await ctx.send("You need to specify which role you're trying to assign!")
+                break
+        if role_exists:
+            current_roles = config[ctx.guild.name]["self_assignable_roles"].split(",")
+            if arg[0] in current_roles:
+                valid_role = True
+            else:
+                await ctx.send("That role is not self-assignable!")
+        else:
+            await ctx.send("That role is does not exist!")
+        if valid_role:
+            rank = utils.get(ctx.guild.roles, name=arg[0])
+            if rank not in ctx.message.author.roles:
+                await ctx.message.author.add_roles(rank)
+                await ctx.send(f"You are now {arg[0]}")
+            else:
+                await ctx.send(f"You're already {arg[0]}!")
+    else:
+        current_roles = config[ctx.guild.name]["self_assignable_roles"]
+        await ctx.send(f"Current self-assignable roles: {current_roles}")
+
+
 
 print ("functions loaded.")
 
