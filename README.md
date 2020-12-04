@@ -4,7 +4,7 @@
 1. Make sure you've downloaded Python 3.9
 2. Create a virtual environment on this folder with `venv`
 3. Enter the virtual environment using the `activate` script in \Scripts
-4. Use `pip` to download discord.py: `pip install discord.py`
+4. Use `pip` to install the bot's requirements: `pip install -r requirements.txt`
 5. Run the bot - it'll create a file called `iain.cfg`, you'll need to put your token there.
 
 ## Connecting to a server
