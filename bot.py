@@ -8,7 +8,7 @@ from discord import File
 from discord import Intents
 from discord import Embed
 import random
-import puns.py
+import puns
 
 # https://docs.python.org/3/library/configparser.html
 config = configparser.ConfigParser()
