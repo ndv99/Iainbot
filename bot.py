@@ -8,6 +8,7 @@ from discord import File
 from discord import Intents
 from discord import Embed
 import random
+import puns.py
 
 # https://docs.python.org/3/library/configparser.html
 config = configparser.ConfigParser()
@@ -19,14 +20,7 @@ config.read("iain.cfg")
 
 # gets the bot token
 TOKEN = config["INFO"]["token"]
-IAIN_PUNS = [
-        "Don't interrupt someone working intently on a puzzle. Chances are, you'll hear some crosswords!",
-        "I'm a big fan of whiteboards. I find them quite re-markable!",
-        "I was going to make myself a belt made out of watches, but then I realized it would be a waist of time!",
-        "The machine at the coin factory just suddenly stopped working, with no explanation. It doesn't make any cents!",
-        "Yesterday, a clown held the door open for me. It was such a nice jester!",
-        "I'm only friends with 25 letters of the alphabet. I don't know Y."
-    ] # yes, this is indeed a list of puns.
+IAIN_PUNS = puns.neutral # yes, this is indeed a list of puns. https://pyjok.es/ 
 RESTRICTED_COMMAND_MSG = "Sorry, that command is for server moderators only!"
 
 print("constants initialised.")
