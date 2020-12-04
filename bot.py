@@ -145,7 +145,7 @@ async def autorole(ctx, *arg):
         await ctx.send(RESTRICTED_COMMAND_MSG)
 
 # sets the default role
-@bot.command(name="defaultRole", brief="Sets the default role for new users", help="Sets the default role that autorole uses for new users. You need to turn autorole on for this to work!" usage="<rolename>")
+@bot.command(name="defaultRole", brief="Sets the default role for new users", help="Sets the default role that autorole uses for new users. You need to turn autorole on for this to work!", usage="<rolename>")
 async def set_default_role(ctx, *arg):
     mod = False
     for role in ctx.message.author.roles:
