@@ -6,6 +6,7 @@ from discord.ext import commands
 from discord import utils
 from discord import File
 from discord import Intents
+from discord import Embed
 import random
 
 # https://docs.python.org/3/library/configparser.html
@@ -263,7 +264,12 @@ async def self_assign_role(ctx, *arg):
         current_roles = config[ctx.guild.name]["self_assignable_roles"]
         await ctx.send(f"Current self-assignable roles: {current_roles}")
 
-
+@bot.command(name="pet", brief="Sends a picture of Vincent's dog, Nick's cat, or another pet.", help="Fetches a picture of Vincent's dog (Ollie), Nick's cat (Scruffy), or one of vincent's freinds' pets and puts it in the chat.")
+async def pet(ctx):
+    petnumber = random.randint(0, 145)
+    imagelink = f"https://cdn.vlee.me.uk/TurnipBot/pets/{petnumber}.png"
+    
+    await ctx.send(imagelink)
 
 print ("functions loaded.")
 
