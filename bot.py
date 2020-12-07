@@ -267,6 +267,10 @@ async def pet(ctx):
 
 print ("functions loaded.")
 
+@bot.command(name="examHelp")
+async def examHelp(ctx):
+    await ctx.send("```sql\nSELECT answer\n FROM notes\n WHERE answer=correct\n AND relevance>80\n```")
+
 if TOKEN == "" or TOKEN == " ":
     print("You haven't set your bot's token.")
     print("Please go into iain.cfg and paste in your bot's token, which can be found here: https://discord.com/developers/applications/")
