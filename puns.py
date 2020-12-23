@@ -101,5 +101,7 @@ neutral = [
     "I was going to make myself a belt made out of watches, but then I realized it would be a waist of time!",
     "The machine at the coin factory just suddenly stopped working, with no explanation. It doesn't make any cents!",
     "Yesterday, a clown held the door open for me. It was such a nice jester!",
-    "I'm only friends with 25 letters of the alphabet. I don't know Y."
+    "I'm only friends with 25 letters of the alphabet. I don't know Y.",
+    "I applied for a job where I had to exmplain jokes to people. \n\nI didn't get it.",
+    "I could tell you my Fibonacci joke...It's as good as the last two put together"
 ]
