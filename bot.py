@@ -9,6 +9,8 @@ from discord import Intents
 from discord import Embed
 import random
 import puns
+import anecdotes
+import facts
 
 # https://docs.python.org/3/library/configparser.html
 config = configparser.ConfigParser()
@@ -20,7 +22,9 @@ config.read("iain.cfg")
 
 # gets the bot token
 TOKEN = config["INFO"]["token"]
-IAIN_PUNS = puns.neutral # yes, this is indeed a list of puns. https://pyjok.es/ 
+IAIN_PUNS = puns.neutral # yes, this is indeed a list of puns. https://pyjok.es/
+IAIN_ANECDOTE = anecdotes.neutral # takes list from anecdotes file
+IAIN_FACT = facts.neutral # takes list from facts file
 RESTRICTED_COMMAND_MSG = "Sorry, that command is for server moderators only!"
 
 print("constants initialised.")
@@ -100,7 +104,7 @@ async def pun(ctx):
 # gives an anecdote
 @bot.command(name="anecdote", brief="[beta]Responds with the beginning of an annecdote", help="Responds with an annecdote akin to something Iain might say. Needs more work, feel free to contribute.")
 async def anecdote(ctx):
-    response = "I remember once back in 1987 when I was learning to work with computers..."
+    response = random.choice(IAIN_ANECDOTE) # added anecdotes into file, choses one at random
     await ctx.send(response)
 
 # joins VC of user
@@ -267,9 +271,15 @@ async def pet(ctx):
 
 print ("functions loaded.")
 
-@bot.command(name="examHelp")
+@bot.command(name="examHelp", brief="A handy hint from Uncle Iain")
 async def examHelp(ctx):
     await ctx.send("```sql\nSELECT answer\n FROM notes\n WHERE answer=correct\n AND relevance>80\n```")
+
+# Iain Facts
+@bot.command(name="fact", brief="Let me show you my vast intelect", help="Prints a random fact from the facts file")
+async def fact(ctx):
+    response = random.choice(IAIN_FACT)
+    await ctx.send(response)
 
 if TOKEN == "" or TOKEN == " ":
     print("You haven't set your bot's token.")
