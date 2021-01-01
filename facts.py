@@ -45,5 +45,24 @@ neutral = [
     "The record distance for throwing a paper plane is 69.14 metres",
     "Dogs see in blue and yellow",
     "Lizards in New Guinea have lime-green blood"
-    
+    "Using a musical instrument to annoy someone is illegal in Singapore"
+    "The pope drives a blue ford focus"
+    "Jeff Goldblum puts orange juice on his cereal"
+    "In 1930s New Zealand, there was an outbreak of exploding trousers"
+    "60 percent of 1 pence and 2 pence coins are used once, then put in a jar"
+    "The bitcoin network uses more power than the whole of Serbia"
+    "Australia has salt-and-vinegar flavoured grass"
+    "You are advised not to build snowmen in Antarctica as it might disturb the animals"
+    "Most hairspray isn't vegan"
+    "The roundest country in the world is Sierra Leone"
+    "On 18 April 1930, the BBC annouced that there was no news that day, so listeners could enjoy some piano music"
+    "During thr Second World War, the tops of British pillar boxes were coated with special yellow paint designed to detect poison gas"
+    "Llamas urinate backwards"
+    "Sheep fighting is a popular, but illegal, sport in Algeria"
+    "The Queen loves to dance to 'Dancing Queen'"
+    "Tortilla chips can spontaneously combust... think about that when you next have a packet of Doritos"
+    "One of the hyenas in 'The Lion King' was called Shenzi, which means 'worthless bastard' in Swahili"
+    "The giant armadillo sleeps for 18.5 hours a day"
+    "Women have broader smiles than men"
+    "In the Philippines, it's a crime to annnoy or irritate someone"
 ]
