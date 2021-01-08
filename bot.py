@@ -62,7 +62,7 @@ async def on_ready():
 # creates server info in cfg file when bot joins server
 @bot.event
 async def on_guild_join(guild):
-    config[f"{guild.name}"] = {"name": f"'{guild.name}''", "autorole": "false", "default_role": "", "adminroles": "", "self_assignable_roles": ""}
+    config[f"{guild.name}"] = {"name": f"'{guild.name}'", "autorole": "false", "default_role": "", "adminroles": "", "self_assignable_roles": ""}
     config.write(open("iain.cfg", "w"))
     print(f"{bot.user.name} has joined {guild.name}")
 
