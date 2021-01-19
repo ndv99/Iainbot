@@ -229,6 +229,7 @@ async def self_assignable_roles(ctx, *args):
     else:
         await ctx.send(RESTRICTED_COMMAND_MSG)
 
+# assign role to self
 @bot.command(name="iam", brief="Assign yourself a role. Leave empty to see self-assignable roles.", help="Assign yourself one of the self-assignable roles. If you don't provide a role name, the list of self-assignable roles wll be shown.", usage="<rolename>")
 async def self_assign_role(ctx, *arg):
     if arg:
@@ -262,6 +263,7 @@ async def self_assign_role(ctx, *arg):
         current_roles = config[ctx.guild.name]["self_assignable_roles"]
         await ctx.send(f"Current self-assignable roles: {current_roles}")
 
+# pet command, sends picture of pet
 @bot.command(name="pet", brief="Sends a picture of Vincent's dog, Nick's cat, or another pet.", help="Fetches a picture of Vincent's dog (Ollie), Nick's cat (Scruffy), or one of vincent's freinds' pets and puts it in the chat.")
 async def pet(ctx):
     petnumber = random.randint(0, 145)
@@ -269,6 +271,7 @@ async def pet(ctx):
     
     await ctx.send(imagelink)
 
+# helpful tips when exams role around
 @bot.command(name="examHelp", brief="A handy hint from Uncle Iain")
 async def examHelp(ctx):
     await ctx.send("```sql\nSELECT answer\n FROM notes\n WHERE answer=correct\n AND relevance>80\n```")
@@ -277,6 +280,12 @@ async def examHelp(ctx):
 @bot.command(name="fact", brief="Let me show you my vast intelect", help="Prints a random fact from the facts file")
 async def fact(ctx):
     response = random.choice(IAIN_FACT)
+    await ctx.send(response)
+
+# Iain's opinion on cheating
+@bot.command(name="cheat", brief="A reminder of how I feel about cheating", help="Iain gives his opinion about cheating and sends the university guide to academic misconduct")
+async def cheat(ctx):
+    response = ("I've said it before, I'll say it again... ANY form of cheating is prohibited under university policy. Just because you are in a discord server, does not mean you are safe from being caught... some folk are right snakes\n Reminder: https://www.dundee.ac.uk/corporate-information/code-practice-academic-misconduct-students... even though you shouldn't need to be reminded :/")
     await ctx.send(response)
 
 print ("functions loaded.")
