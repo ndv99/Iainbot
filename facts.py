@@ -1,5 +1,5 @@
 neutral = [
-    "Did you know, starting a semester 2 weeks late will cause mayhem and carnege as the semester draws to a close",
+    "Did you know, starting a semester 2 weeks late will cause mayhem and carnage as the semester draws to a close",
     "Nobody knows who named the earth",
     "Zero does not exist in nature",
     "Without zero, modern electronics wouldn't exist",
