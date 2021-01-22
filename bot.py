@@ -285,7 +285,7 @@ async def fact(ctx):
 # Iain's opinion on cheating
 @bot.command(name="cheat", brief="A reminder of how I feel about cheating", help="Iain gives his opinion about cheating and sends the university guide to academic misconduct")
 async def cheat(ctx):
-    response = ("I've said it before, I'll say it again... ANY form of cheating is prohibited under university policy. Just because you are in a discord server, does not mean you are safe from being caught... some folk are right snakes\n Reminder: https://www.dundee.ac.uk/corporate-information/code-practice-academic-misconduct-students... even though you shouldn't need to be reminded :/")
+    response = ("I've said it before, I'll say it again... ANY form of cheating is prohibited under university policy. Just because you are in a discord server, does not mean you are safe from being caught... some folk are right snakes\nReminder: https://www.dundee.ac.uk/corporate-information/code-practice-academic-misconduct-students... even though you shouldn't need to be reminded :/")
     await ctx.send(response)
 
 print ("functions loaded.")
