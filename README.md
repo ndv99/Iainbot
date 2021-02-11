@@ -14,5 +14,11 @@ You can follow [this tutorial](https://realpython.com/how-to-make-a-discord-bot-
 
 Once you've done that, you can get your bot token, add it to the config file, and then use the portal to invite the bot to a server that you own. The bot has code in it to pre-fill the config file with the necessary variables for the bot to work.
 
+**You'll need to go into the config file (iain.cfg) and add your admin roles to the file.** Example:
+`admin_roles = admin,mod`
+You'll also need to ensure that whoever is configuring the bot has admin permissions.
+
 ## Bot commands
 Once you're in a server, type `!help` to see a command list. You can also type `!help <commandname>` to get more detailed help on that command.
+
+In order for a bot to assign/unassign roles, you must make sure the bot is of a higher rank in the server than those roles.
