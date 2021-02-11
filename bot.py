@@ -62,7 +62,7 @@ async def on_ready():
 # creates server info in cfg file when bot joins server
 @bot.event
 async def on_guild_join(guild):
-    config[f"{guild.name}"] = {"name": f"'{guild.name}'", "autorole": "false", "default_role": "", "adminroles": "", "self_assignable_roles": ""}
+    config[f"{guild.name}"] = {"name": f"'{guild.name}'", "autorole": "false", "remove_default_role": "true", "default_role": "", "admin_roles": "", "self_assignable_roles": ""}
     config.write(open("iain.cfg", "w"))
     print(f"{bot.user.name} has joined {guild.name}")
 
@@ -146,6 +146,27 @@ async def autorole(ctx, *arg):
             else:
                 autorole_status = config[ctx.guild.name]["autorole"]
                 await ctx.send(f"Autorole status: {autorole_status}")
+    else:
+        await ctx.send(RESTRICTED_COMMAND_MSG)
+
+@bot.command(name="removeDefaultRole", brief="[Admin]Toggle default role removal", help="Turns default role removal on or off (using arg 'true' or 'false' respectively). It'll give the status of removeDefaultRole if you don't provide args", usage="<true/false>")
+async def removeDefaultRole(ctx, *arg):
+    mod = check_if_mod(ctx.message.author.roles, ctx.guild.name)
+    if mod:
+        if arg:
+            if arg[0] == "true":
+                config[ctx.guild.name]["remove_default_role"] = 'true'
+                config.write(open("iain.cfg", "w"))
+                await ctx.send("RemoveDefualtRole is now true")
+            elif arg[0] == "false":
+                config[ctx.guild.name]["remove_default_role"] = 'false'
+                config.write(open("iain.cfg", "w"))
+                await ctx.send("RemoveDefualtRole is now false")
+            else:
+                await ctx.send("Invalid argument. Please try again.")
+        else:
+            remove_default_role_status = config[ctx.guild.name]["remove_default_role"]
+            await ctx.send(f"RemoveDefualtRole status: {remove_default_role_status}")
     else:
         await ctx.send(RESTRICTED_COMMAND_MSG)
 
@@ -259,6 +280,9 @@ async def self_assign_role(ctx, *arg):
             if rank not in ctx.message.author.roles:
                 await ctx.message.author.add_roles(rank)
                 await ctx.send(f"You are now {role_name}")
+                if config[ctx.guild.name]["remove_default_role"] == "true":
+                    default_role = utils.get(ctx.guild.roles, name=config[ctx.guild.name]["default_role"])
+                    await ctx.message.author.remove_roles(default_role)
             else:
                 await ctx.send(f"You're already {role_name}!")
     else:
