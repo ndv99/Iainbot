@@ -236,29 +236,31 @@ async def self_assign_role(ctx, *arg):
         roles = ctx.guild.roles
         role_exists = False
         valid_role = False
+        role_name = None
         for role in roles:
             try:
-                if arg[0] == role.name:
+                if arg[0].lower() == role.name.lower():
                     role_exists = True
+                    role_name = role.name
                     break
             except IndexError:
                 await ctx.send("You need to specify which role you're trying to assign!")
                 break
         if role_exists:
             current_roles = config[ctx.guild.name]["self_assignable_roles"].split(",")
-            if arg[0] in current_roles:
+            if role_name in current_roles:
                 valid_role = True
             else:
                 await ctx.send("That role is not self-assignable!")
         else:
-            await ctx.send("That role is does not exist!")
+            await ctx.send("That role does not exist!")
         if valid_role:
-            rank = utils.get(ctx.guild.roles, name=arg[0])
+            rank = utils.get(ctx.guild.roles, name=role_name)
             if rank not in ctx.message.author.roles:
                 await ctx.message.author.add_roles(rank)
-                await ctx.send(f"You are now {arg[0]}")
+                await ctx.send(f"You are now {role_name}")
             else:
-                await ctx.send(f"You're already {arg[0]}!")
+                await ctx.send(f"You're already {role_name}!")
     else:
         current_roles = config[ctx.guild.name]["self_assignable_roles"]
         await ctx.send(f"Current self-assignable roles: {current_roles}")
